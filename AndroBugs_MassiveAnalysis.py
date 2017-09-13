@@ -22,7 +22,7 @@ def parseArgument():
     return args
 
 
-def main():
+if __name__ == "__main__":
     args = parseArgument()
 
     print
@@ -108,7 +108,16 @@ def main():
                 else:
                     main_cmd = "python androbugs.py"
 
-                cmd = main_cmd + " -s -v -e " + str(args.extra) + " -f " + os.path.join(input_dir, filename) + " -o " + output_dir + " -m " + ANALYZE_MODE_MASSIVE + " -b " + str(args.analyze_engine_build) + " -t " + str(args.analyze_tag)
+                cmd = ('{command} -s -v -e {extra} -f "{apk_file}"'
+                       '-o {output} -m {mode} -b {build} -t {tag}').format(
+                        command=main_cmd,
+                        extra=str(args.extra),
+                        apk_file=os.path.join(input_dir, filename),
+                        output=output_dir,
+                        mode=ANALYZE_MODE_MASSIVE,
+                        build=str(args.analyze_engine_build),
+                        tag=str(args.analyze_tag)
+                        )
                 # print(cmd)
                 process = os.popen(cmd)
                 preprocessed = process.read()
@@ -119,8 +128,3 @@ def main():
                 break
             except Exception as err:
                 print(err)
-                pass
-
-
-if __name__ == "__main__":
-    main()
